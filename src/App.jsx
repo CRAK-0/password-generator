@@ -1,24 +1,25 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 const App = () => {
-  const [Lenght, setLenght] = useState(6);
-  const [NumberAllowed, setNumberAllowed] = useState(false);
-  const [CharAllowed, setCharAllowed] = useState(false);
-  const [Password, setPassword] = useState("");
-  console.log(setPassword);
+  const [Lenght, setLenght] = useState(6); //lenght of the password
+  const [NumberAllowed, setNumberAllowed] = useState(false); // boolean to allow numbers in the password
+  const [CharAllowed, setCharAllowed] = useState(false); // boolean to allow special characters in the password
+  const [Password, setPassword] = useState(""); // state to store the generated password
+
+  // function to generate the password based on the selected options
   const passwordGenerator = useCallback(() => {
-    let pass = "";
-    let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    let pass = ""; // variable to store the generated password
+    let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; // string of characters to choose from
     if (NumberAllowed) str += "0123456789";
     if (CharAllowed) str += "!@#$%^&*(){}[]+";
+    // loop to generate the password based on the selected length runs until the desired length is reached
     for (let i = 0; i < Lenght; i++) {
-      pass += str.charAt(Math.floor(Math.random() * str.length));
-
-      pass += str.charAt(Math.floor(Math.random() * str.length));
+      pass += str.charAt(Math.floor(Math.random() * str.length)); // random character is added to the password from the string of characters
     }
-    setPassword(pass);
-  }, [Lenght, NumberAllowed, CharAllowed, setPassword]);
+    setPassword(pass); // the generated password is stored in the state
+  }, [Lenght, NumberAllowed, CharAllowed, setPassword]); // useCallback is used to memoize the passwordGenerator function, so it only changes when its dependencies change
 
+  // useEffect is used to call the passwordGenerator function whenever the length, number allowed, or character allowed options change
   useEffect(() => {
     passwordGenerator();
   }, [length, NumberAllowed, CharAllowed, passwordGenerator]);
@@ -37,7 +38,7 @@ const App = () => {
           <input
             className="h-14 rounded-l-xl w-4/6 bg-white "
             type="text"
-            value={Password}
+            value={Password} // the generated password is displayed in the input field
             readOnly
           />
           <button
@@ -53,8 +54,8 @@ const App = () => {
             type="range"
             min="6"
             max="100"
-            value={Lenght}
-            onChange={(e) => setLenght(e.target.value)}
+            value={Lenght} // the selected length of the password is displayed in the range input
+            onChange={(e) => setLenght(e.target.value)} // the length of the password is updated when the range input value changes
           />
           <label htmlFor="length">Length: {Lenght}</label>
           <input
